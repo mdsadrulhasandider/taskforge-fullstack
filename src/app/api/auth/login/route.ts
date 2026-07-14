@@ -24,11 +24,14 @@ export async function POST(req: Request) {
       if (!demoUser) {
         const hashedPassword = await bcrypt.hash('password123', 10);
         await User.create({
-          name: 'Rahat Khan',
+          name: 'Md Sadrul Hasan Dider',
           email: 'user@taskforge.com',
           password: hashedPassword,
           role: 'freelancer'
         });
+      } else if (demoUser.name !== 'Md Sadrul Hasan Dider') {
+        demoUser.name = 'Md Sadrul Hasan Dider';
+        await demoUser.save();
       }
     } else if (email === 'admin@taskforge.com' && password === 'admin123') {
       const demoAdmin = await User.findOne({ email: 'admin@taskforge.com' });
