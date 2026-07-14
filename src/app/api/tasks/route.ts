@@ -31,7 +31,7 @@ const SEED_TASKS = [
     location: "Remote",
     rating: 4.8,
     priority: "medium",
-    image: "https://images.unsplash.com/photo-1561070791-26c113006238?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=600&auto=format&fit=crop",
     clientName: "PulseFit Studio",
     clientEmail: "admin@taskforge.com",
     date: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(), // 4 days ago
@@ -87,7 +87,7 @@ const SEED_TASKS = [
     location: "On-site",
     rating: 4.9,
     priority: "high",
-    image: "https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=600&auto=format&fit=crop",
+    image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=600&auto=format&fit=crop",
     clientName: "Apex Ventures",
     clientEmail: "admin@taskforge.com",
     date: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
@@ -125,6 +125,17 @@ const SEED_TASKS = [
 export async function GET(req: Request) {
   try {
     await dbConnect();
+
+    // Automatically fix legacy broken seed image URLs in the database
+    await Task.updateMany(
+      { image: "https://images.unsplash.com/photo-1561070791-26c113006238?q=80&w=600&auto=format&fit=crop" },
+      { $set: { image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=600&auto=format&fit=crop" } }
+    );
+    await Task.updateMany(
+      { image: "https://images.unsplash.com/photo-1542744094-3a31f103e35f?q=80&w=600&auto=format&fit=crop" },
+      { $set: { image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=600&auto=format&fit=crop" } }
+    );
+
     const { searchParams } = new URL(req.url);
 
     // Seed if collection is empty
